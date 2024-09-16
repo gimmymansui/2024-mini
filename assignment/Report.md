@@ -1,7 +1,8 @@
 ## Exercise 1
 
-approximate max_bright = 1300
+1. what are the "max_bright" and "min_bright" values you found?
 
+approximate max_bright = 1300
 approximate min_bright = 48000
 
 ## Exercise 2

@@ -7,10 +7,28 @@ import time
 import random
 import json
 
+import urequests
+import ujson
 
-N: int = 3
+FIREBASE_URL = "https://senior-design-micropython-default-rtdb.firebaseio.com"
+   
+N: int = 10 # Changed to 10
 sample_ms = 10.0
 on_ms = 500
+
+def upload_data(data, name):
+    url = f"{FIREBASE_URL}/response_times/{name}.json"
+    headers = {'Content-Type': 'application/json'}
+
+    try:
+        response = urequests.put(url, headers=headers, data=ujson.dumps(data))
+        print(response)
+        print(f"Upload Success: {response.status_code}")
+        print(f"Upload Response: {response.text}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    finally:
+        response.close()
 
 
 def random_time_interval(tmin: float, tmax: float) -> float:
@@ -52,12 +70,26 @@ def scorer(t: list[int | None]) -> None:
 
     t_good = [x for x in t if x is not None]
 
-    print(t_good)
+    print(f"Response time (ms) {t_good}")
+    
+    min_val = min(t_good)
+    max_val = max(t_good)
+    average = sum(t_good)/len(t_good)
+    
+    print(f"Maximum Response Time: {max_val}")
+    print(f"Minimum Response Time: {min_val}")
+    print(f"Average Response Time: {average}")
 
     # add key, value to this dict to store the minimum, maximum, average response time
     # and score (non-misses / total flashes) i.e. the score a floating point number
     # is in range [0..1]
-    data = {}
+    data = {
+        "minimum_response_time": min_val,
+        "maximum_response_time": max_val,
+        "average_response_time": average,
+        "full_response_time_data": t_good
+        }
+    
 
     # %% make dynamic filename and write JSON
 
@@ -67,6 +99,8 @@ def scorer(t: list[int | None]) -> None:
     filename = f"score-{now_str}.json"
 
     print("write", filename)
+    
+    upload_data(data, f"score-{now_str}")
 
     write_json(filename, data)
 
@@ -100,3 +134,4 @@ if __name__ == "__main__":
     blinker(5, led)
 
     scorer(t)
+

@@ -1,5 +1,8 @@
 ## Exercise 1
 
+approximate max_bright = 1300
+
+approximate min_bright = 48000
 
 ## Exercise 2
 

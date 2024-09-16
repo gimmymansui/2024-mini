@@ -24,10 +24,6 @@ Experiment using exercise_light.py to find approximate max_bright and min_bright
 
 1. what are the "max_bright" and "min_bright" values you found?
 
-approximate max_bright = 1300
-
-approximate min_bright = 48000
-
 ## Notes
 
 Pico MicroPython time.sleep() doesn't error for negative values even though such are obviously incorrect--it is undefined for a system to sleep for negative time.
